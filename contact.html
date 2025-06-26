@@ -693,29 +693,73 @@
             <h2 class="section-title">Send Us a Message</h2>
             
             <div class="contact-form">
-                <form id="contactForm">
-                    <div class="form-group">
-                        <label for="name">Your Name</label>
-                        <input type="text" id="name" class="form-control" required placeholder="Enter your name">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <input type="tel" id="phone" class="form-control" required placeholder="Enter your phone number">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="email">Email (Optional)</label>
-                        <input type="email" id="email" class="form-control" placeholder="Enter your email">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="message">Your Message</label>
-                        <textarea id="message" class="form-control" required placeholder="How can we help you?"></textarea>
-                    </div>
-                    
-                    <button type="submit" class="btn" style="width: 100%;">Send Message</button>
-                </form>
+                 
+                <!-- ✅ FORM HTML -->
+<form id="contactForm" action="https://api.web3forms.com/submit" method="POST">
+  <!-- Web3Forms Access Key -->
+  <input type="hidden" name="access_key" value="a6ea2e5e-57b4-48c5-98b3-7fcf6a10946c">
+  <input type="hidden" name="from_name" value="Website Contact">
+  <input type="hidden" name="replyto" value="your@email.com">
+
+  <!-- Name -->
+  <div class="form-group">
+    <label for="name">Your Name</label>
+    <input type="text" id="name" name="name" class="form-control" required placeholder="Enter your name">
+  </div>
+
+  <!-- Phone -->
+  <div class="form-group">
+    <label for="phone">Phone Number</label>
+    <input type="tel" id="phone" name="phone" class="form-control" required placeholder="Enter your phone number">
+  </div>
+
+  <!-- Email -->
+  <div class="form-group">
+    <label for="email">Email (Optional)</label>
+    <input type="email" id="email" name="email" class="form-control" placeholder="Enter your email">
+  </div>
+
+  <!-- Message -->
+  <div class="form-group">
+    <label for="message">Your Message</label>
+    <textarea id="message" name="message" class="form-control" required placeholder="How can we help you?"></textarea>
+  </div>
+
+  <!-- Submit Button -->
+  <button type="submit" class="btn" style="width: 100%;">Send Message</button>
+
+  <!-- ✅ Success/Error Message -->
+  <div id="formMessage" style="margin-top: 15px; display: none;"></div>
+</form>
+<script>
+  const form = document.getElementById('contactForm');
+  const messageBox = document.getElementById('formMessage');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const response = await fetch(form.action, {
+      method: "POST",
+      body: formData
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      messageBox.innerText = "✅ Thank you! Your message has been sent.";
+      messageBox.style.color = "green";
+      form.reset();
+    } else {
+      messageBox.innerText = "❌ Failed to send message. Please try again.";
+      messageBox.style.color = "red";
+    }
+
+    messageBox.style.display = "block";
+  });
+</script>
+
+
             </div>
             
             <div class="contact-info">
@@ -807,8 +851,7 @@
             
             // Here you would typically send this data to your server
             // For demo purposes, we'll just show an alert
-            alert(`Thank you ${name}! Your message has been sent. We will contact you shortly at ${phone}.`);
-            
+           
             // Reset the form
             contactForm.reset();
         });
